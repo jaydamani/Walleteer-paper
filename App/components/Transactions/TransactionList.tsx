@@ -34,14 +34,15 @@ export function TransactionList({
       stickySectionHeadersEnabled
       keyExtractor={t => t.id.toString()}
       renderSectionHeader={({ section }) => <Text>{section.title}</Text>}
-      renderItem={renderTransaction}></SectionList>
+      renderItem={renderTransaction}
+    />
   );
 }
 
 function renderTransaction({
   item: { amount, icon, title, date, category },
 }: ListRenderItemInfo<Transaction>) {
-  const right = () => {
+  const Right = () => {
     const rightStyle: TextStyle = {
       color: amount < 0 ? 'red' : 'green',
       textAlign: 'right',
@@ -56,13 +57,15 @@ function renderTransaction({
       </Feather>
     );
   };
-  const left = (props: { color: string; style: ViewStyle }) => {
+  const Left = (props: { color: string; style: ViewStyle }) => {
+    const fontSize = useWindowDimensions().fontScale;
+    const theme = useTheme();
     return icon ? (
       <List.Icon {...props} icon={icon} />
     ) : (
       <Avatar.Text
-        size={40.5 * useWindowDimensions().fontScale}
-        color={useTheme().colors.onPrimary}
+        size={40.5 * fontSize}
+        color={theme.colors.onPrimary}
         label={category}
       />
     );
@@ -75,8 +78,8 @@ function renderTransaction({
   return (
     <List.Item
       title={title}
-      left={left}
-      right={right}
+      left={Left}
+      right={Right}
       description={date.toDateString()}
       onPress={onPress}
     />
