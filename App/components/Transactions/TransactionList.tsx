@@ -1,7 +1,11 @@
-import { useCallback } from 'react';
-import { TextStyle, ViewStyle, useWindowDimensions } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
-import { List, Avatar, useTheme } from 'react-native-paper';
+import {
+  ListRenderItemInfo,
+  SectionList,
+  TextStyle,
+  ViewStyle,
+  useWindowDimensions,
+} from 'react-native';
+import { List, Avatar, useTheme, Text } from 'react-native-paper';
 import Feather from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export interface Transaction {
@@ -18,20 +22,26 @@ export function TransactionList({
 }: {
   transactions: readonly Transaction[];
 }) {
+  const sections = [
+    {
+      title: 'Section 1',
+      data: transactions,
+    },
+  ];
   return (
-    <ScrollView>
-      <List.Section style={{ marginLeft: 10 }}>
-        <List.Subheader style={{ paddingVertical: 0 }}>test</List.Subheader>
-        {transactions.map(transaction => (
-          <Transaction key={transaction.id} {...transaction}></Transaction>
-        ))}
-      </List.Section>
-    </ScrollView>
+    <SectionList
+      sections={sections}
+      stickySectionHeadersEnabled
+      keyExtractor={t => t.id.toString()}
+      renderSectionHeader={({ section }) => <Text>{section.title}</Text>}
+      renderItem={renderTransaction}></SectionList>
   );
 }
 
-function Transaction({ amount, category, date, title, icon }: Transaction) {
-  const right = useCallback(() => {
+function renderTransaction({
+  item: { amount, icon, title, date, category },
+}: ListRenderItemInfo<Transaction>) {
+  const right = () => {
     const rightStyle: TextStyle = {
       color: amount < 0 ? 'red' : 'green',
       textAlign: 'right',
@@ -45,25 +55,21 @@ function Transaction({ amount, category, date, title, icon }: Transaction) {
         {-amount}
       </Feather>
     );
-  }, [amount]);
-
-  const left = useCallback(
-    (props: { color: string; style: ViewStyle }) => {
-      return icon ? (
-        <List.Icon {...props} icon={icon} />
-      ) : (
-        <Avatar.Text
-          size={40.5 * useWindowDimensions().fontScale}
-          color={useTheme().colors.onPrimary}
-          label={category}
-        />
-      );
-    },
-    [icon],
-  );
+  };
+  const left = (props: { color: string; style: ViewStyle }) => {
+    return icon ? (
+      <List.Icon {...props} icon={icon} />
+    ) : (
+      <Avatar.Text
+        size={40.5 * useWindowDimensions().fontScale}
+        color={useTheme().colors.onPrimary}
+        label={category}
+      />
+    );
+  };
 
   function onPress() {
-    return console.log('Form not created!!');
+    return console.log('Form SoonTM');
   }
 
   return (
