@@ -1,10 +1,10 @@
 import { Transaction, TransactionList } from '@Components';
-import Icon from 'react-native-vector-icons/FontAwesome5';
 import { DrawerNavigationOptions } from '@react-navigation/drawer';
 import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { FAB } from 'react-native-paper';
 import { ScreenProps } from 'react-native-screens';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 export const options: DrawerNavigationOptions = {
   headerTitle: 'Home',
