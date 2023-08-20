@@ -5,11 +5,13 @@
     "baseUrl": ".",
     "paths": {
       "@Navigation/*": ["./App/navigation/*"],
-      "@Components": ["./App/components"],
+      "@Components": ["App/components"],
       "@Context/*": ["./App/contexts/*"],
       "@Screens": ["./App/screens"],
       "@Styles/*": ["./App/styles/*"],
-      "@Assets/*": ["../assets/*"]
+      "@Assets/*": ["./assets/*"],
+      "@root": ["."],
+      "@root/*": ["./*"]
     },
     "skipLibCheck": true,
     "skipDefaultLibCheck": true

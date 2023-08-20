@@ -11,6 +11,7 @@ module.exports = {
           '@Screens': './App/screens',
           '@Styles': './App/styles',
           '@Assets': './assets',
+          '@root': './index.js',
         },
         extensions: ['.js', '.jsx', '.ts', '.tsx'],
       },
