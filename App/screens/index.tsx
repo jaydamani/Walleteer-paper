@@ -15,4 +15,8 @@ export const screens: Screen[] = [
     name: 'Home',
     ...Home,
   },
+  {
+    name: 'Nothing',
+    Component: () => <></>,
+  },
 ];
