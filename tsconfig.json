@@ -6,12 +6,11 @@
     "paths": {
       "@Navigation/*": ["./App/navigation/*"],
       "@Components": ["App/components"],
-      "@Context/*": ["./App/contexts/*"],
+      "@database": ["App/database"],
+      "@models/*": ["App/database/model/*"],
       "@Screens": ["./App/screens"],
-      "@Styles/*": ["./App/styles/*"],
       "@Assets/*": ["./assets/*"],
-      "@root": ["."],
-      "@root/*": ["./*"]
+      "@lib/*": ["./App/lib/*"]
     },
     "skipLibCheck": true,
     "skipDefaultLibCheck": true
