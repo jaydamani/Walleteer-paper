@@ -9,14 +9,10 @@
     "start": "react-native start",
     "test": "jest"
   },
-  "eslintConfig": {
-    "rules": {
-      "no-undef": "off"
-    },
-    "extends": "universe/native"
-  },
   "dependencies": {
     "@babel/plugin-proposal-decorators": "^7.22.10",
+    "@nozbe/watermelondb": "^0.26.0",
+    "@nozbe/with-observables": "^1.6.0",
     "@react-navigation/drawer": "^6.6.3",
     "@react-navigation/material-top-tabs": "^6.6.3",
     "@react-navigation/native": "^6.1.7",
@@ -33,6 +29,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
+    "@babel/eslint-parser": "^7.22.10",
     "@babel/plugin-proposal-export-namespace-from": "^7.18.9",
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.18.6",
     "@babel/plugin-proposal-optional-chaining": "^7.21.0",
