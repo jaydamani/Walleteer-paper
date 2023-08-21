@@ -3,6 +3,7 @@ import {
   DefaultTheme as NavigationDefaultTheme,
   Theme as NavigationTheme,
 } from '@react-navigation/native';
+import { createContext } from 'react';
 import { Platform } from 'react-native';
 import {
   MD3DarkTheme,
@@ -11,7 +12,7 @@ import {
   adaptNavigationTheme,
   MD3Theme,
 } from 'react-native-paper';
-import { MD3Type } from 'react-native-paper/lib/typescript/src/types';
+import { MD3Type } from 'react-native-paper/lib/typescript/types';
 
 const { LightTheme, DarkTheme } = adaptNavigationTheme({
   reactNavigationLight: NavigationDefaultTheme,
@@ -51,3 +52,5 @@ export const CombinedDarkTheme: theme = {
     isV3: true,
   }),
 };
+
+export const ThemeContext = createContext<any>(null);

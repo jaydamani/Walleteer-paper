@@ -1,7 +1,6 @@
 import { DrawerContent } from '@Components';
-import { ThemeContext } from '@Context/settings';
 import { screens } from '@Screens';
-import { CombinedDarkTheme } from '@Styles/themes';
+import { CombinedDarkTheme, ThemeContext } from '@lib/theme';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import { useState } from 'react';
