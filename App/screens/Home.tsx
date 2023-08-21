@@ -1,6 +1,7 @@
-import { Transaction, TransactionList } from '@Components';
+import { TransactionList } from '@Components';
+import { database, transactions } from '@database';
+import { CategoryID } from '@lib/constants';
 import { DrawerNavigationOptions } from '@react-navigation/drawer';
-import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { FAB } from 'react-native-paper';
 import { ScreenProps } from 'react-native-screens';
@@ -12,35 +13,23 @@ export const options: DrawerNavigationOptions = {
 };
 
 export function Component(_: ScreenProps) {
-  const [transactions, setTransactions] = useState<readonly Transaction[]>([
-    {
-      id: 1,
-      title: 'first',
-      amount: 69,
-      category: 'A',
-      date: new Date(2023, 4, 22),
-    },
-  ]);
   return (
     <View style={styles.container}>
-      <TransactionList transactions={transactions} />
+      <TransactionList />
       <FAB
         icon="plus"
         onPress={() => {
-          setTransactions([
-            ...transactions,
-            {
-              id: transactions.length + 1,
-              title: `${transactions.length + 1}. name`,
-              amount: Math.round(Math.random() * 100 - 50),
-              category: 'T',
-              date: new Date(
-                2023,
-                Math.round(Math.random() * 12),
-                Math.round(Math.random() * 30),
-              ),
-            },
-          ]);
+          database
+            .write(async () =>
+              transactions.create(t => {
+                t.title = 'test';
+                t.amount = Math.round(Math.random() * 100 - 50);
+                t.category.id = CategoryID.TEST;
+                t.date = new Date(2023, Math.random() * 11, Math.random() * 28);
+                return t;
+              }),
+            )
+            .catch(console.error);
         }}
         style={styles.FAB}
       />

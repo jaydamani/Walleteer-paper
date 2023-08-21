@@ -1,87 +1,102 @@
+import { Transaction, transactions } from '@database';
+import { Q } from '@nozbe/watermelondb';
+import withObservables from '@nozbe/with-observables';
 import {
-  ListRenderItemInfo,
   SectionList,
-  TextStyle,
-  ViewStyle,
-  useWindowDimensions,
+  StyleSheet,
+  ListRenderItemInfo,
+  View,
 } from 'react-native';
-import { List, Avatar, useTheme, Text } from 'react-native-paper';
+import { Text, List } from 'react-native-paper';
 import Feather from 'react-native-vector-icons/MaterialCommunityIcons';
 
-export interface Transaction {
-  id: number;
-  title: string;
-  category: string;
-  amount: number;
-  date: Date;
-  icon?: string;
+import { TransactionIcon } from './TransactionIcon';
+
+export interface TransactionListProps {
+  transactions: readonly Transaction[];
 }
 
-export function TransactionList({
-  transactions,
-}: {
-  transactions: readonly Transaction[];
-}) {
-  const sections = [
-    {
-      title: 'Section 1',
-      data: transactions,
-    },
-  ];
+function TransactionList({ transactions }: TransactionListProps) {
+  const sections: { data: Transaction[]; title: string }[] = [];
+  if (transactions.length) {
+    let lastTitle;
+    for (const t of transactions) {
+      const title = t.date.toLocaleString('default', {
+        month: 'short',
+        year: 'numeric',
+      });
+      if (title !== lastTitle) {
+        sections.push({ title, data: [] });
+        lastTitle = title;
+      }
+      sections[sections.length - 1].data.push(t);
+    }
+  }
+
   return (
-    <SectionList
-      sections={sections}
-      stickySectionHeadersEnabled
-      keyExtractor={t => t.id.toString()}
-      renderSectionHeader={({ section }) => <Text>{section.title}</Text>}
-      renderItem={renderTransaction}
-    />
+    <View style={styles.container}>
+      <SectionList
+        sections={sections}
+        // stickySectionHeadersEnabled
+        keyExtractor={t => t.id}
+        renderSectionHeader={({ section }) => <Text>{section.title}</Text>}
+        renderItem={renderTransactionListItem}
+      />
+    </View>
   );
 }
 
-function renderTransaction({
-  item: { amount, icon, title, date, category },
+export function renderTransactionListItem({
+  item,
 }: ListRenderItemInfo<Transaction>) {
-  const Right = () => {
-    const rightStyle: TextStyle = {
-      color: amount < 0 ? 'red' : 'green',
-      textAlign: 'right',
-    };
-    return amount > 0 ? (
-      <Feather style={rightStyle} name="plus">
-        {amount}
-      </Feather>
-    ) : (
-      <Feather style={rightStyle} name="minus">
-        {-amount}
-      </Feather>
-    );
-  };
-  const Left = (props: { color: string; style: ViewStyle }) => {
-    const fontSize = useWindowDimensions().fontScale;
-    const theme = useTheme();
-    return icon ? (
-      <List.Icon {...props} icon={icon} />
-    ) : (
-      <Avatar.Text
-        size={40.5 * fontSize}
-        color={theme.colors.onPrimary}
-        label={category}
-      />
-    );
-  };
-
   function onPress() {
     return console.log('Form SoonTM');
   }
 
   return (
     <List.Item
-      title={title}
-      left={Left}
-      right={Right}
-      description={date.toDateString()}
+      title={item.title}
+      left={props => <TransactionIcon {...props} transaction={item} />}
+      right={() => (
+        <Feather
+          style={[
+            styles.rightAlign,
+            item.amount > 0 ? styles.positiveAmount : styles.negativeAmount,
+          ]}
+          name="plus">
+          {Math.abs(item.amount)}
+        </Feather>
+      )}
+      description={item.description}
       onPress={onPress}
     />
   );
 }
+
+const enhance = withObservables([], () => {
+  console.log('queried');
+  return {
+    transactions: transactions.query(Q.sortBy('done_at', Q.desc)),
+  };
+});
+
+const enhancedTransactionList = enhance(TransactionList);
+export { enhancedTransactionList as TransactionList };
+
+export const styles = StyleSheet.create({
+  container: {
+    paddingLeft: 10,
+  },
+  rightAlign: {
+    textAlign: 'right',
+  },
+  negativeAmount: {
+    color: 'red',
+  },
+  positiveAmount: {
+    color: 'green',
+  },
+  header: {
+    backgroundColor: 'black',
+  },
+});
