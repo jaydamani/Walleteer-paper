@@ -41,6 +41,11 @@ function TransactionList({ transactions }: TransactionListProps) {
         keyExtractor={t => t.id}
         renderSectionHeader={({ section }) => <Text>{section.title}</Text>}
         renderItem={renderTransactionListItem}
+        getItemLayout={(_, index) => ({
+          index,
+          length: 360,
+          offset: 69 * index,
+        })}
       />
     </View>
   );
