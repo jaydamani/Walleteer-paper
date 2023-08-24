@@ -8,11 +8,14 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import NotLoaded from './screens/NotLoaded';
 
 export function App() {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setErr] = useState('');
+  const start = Date.now();
   useEffect(function () {
-    setupDB()
+    Promise.resolve()
+      .then(setupDB)
       .then(() => setIsLoading(false))
+      .then(() => console.log(Date.now() - start))
       .catch(err => {
         setIsLoading(false);
         console.error(err);
